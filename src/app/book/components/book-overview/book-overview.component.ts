@@ -8,19 +8,22 @@ import {Book} from '../../model/book';
 })
 export class BookOverviewComponent {
   selectedBook: Book | undefined;
-  readonly books: Book[];
+  books: Book[];
 
   constructor() {
     this.books = [
       {
+        id: 0,
         author: 'Marek Matczak',
         title: 'Angular for nerds'
       },
       {
+        id: 1,
         author: 'Douglas Crockford',
         title: 'JavaScript. The Good Parts',
       },
       {
+        id: 2,
         author: 'John Example',
         title: 'A story on TypeScript',
       }
@@ -33,5 +36,11 @@ export class BookOverviewComponent {
 
   isBookSelected(book: Book) {
     return this.selectedBook === book;
+  }
+
+  updateOnBookChange(changedBook: Book) {
+    this.books = this.books.map(
+      book => book.id === changedBook.id ? changedBook : book);
+    this.selectedBook = changedBook;
   }
 }
