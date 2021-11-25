@@ -1,0 +1,4 @@
+<input class="form-control-lg" #searchInput>
+<ul>
+  <li *ngFor="let result of (results$ | async)">{{result}}</li>
+</ul>
