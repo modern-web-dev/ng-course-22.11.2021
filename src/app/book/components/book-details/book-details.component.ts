@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Book} from '../../model/book';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'ba-book-details',
@@ -8,11 +9,14 @@ import {Book} from '../../model/book';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookDetailsComponent {
-  @Input()
-  book: Book | undefined
+  book: Book
 
   @Output()
   bookChange = new EventEmitter<Book>();
+
+  constructor(private readonly currentRoute: ActivatedRoute) {
+    this.book = currentRoute.snapshot.data['book'] || {author: '', title: ''}
+  }
 
   save(event: Event) {
     event.preventDefault();

@@ -1,9 +1,10 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {BookDetailsComponent} from './components/book-details/book-details.component';
 import {BookOverviewComponent} from './components/book-overview/book-overview.component';
 import {BookService} from './services/book.service';
-import { SearchComponent } from './components/search/search.component';
+import {SearchComponent} from './components/search/search.component';
+import {SharedModule} from '../shared/shared.module';
+import {BookDetailsResolver} from './components/book-details/book-details.resolver';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,7 @@ import { SearchComponent } from './components/search/search.component';
     SearchComponent
   ],
   imports: [
-    CommonModule
+    SharedModule
   ],
   exports: [BookOverviewComponent, SearchComponent]
 })
@@ -20,7 +21,7 @@ export class BookModule {
   static forRoot(): ModuleWithProviders<BookModule> {
     return {
       ngModule: BookModule,
-      providers: [BookService]
+      providers: [BookService, BookDetailsResolver]
     }
   }
 }
