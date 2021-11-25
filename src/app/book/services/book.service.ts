@@ -1,7 +1,8 @@
 import {Book} from '../model/book';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 export class BookService {
-  private books: Book[] = [
+  private booksSubject = new BehaviorSubject<Book[]>([
     {
       id: 0,
       author: 'Marek Matczak',
@@ -17,9 +18,21 @@ export class BookService {
       author: 'John Example',
       title: 'A story on TypeScript',
     }
-  ];
+  ]);
+  public readonly valueChanges$ = this.booksSubject.asObservable();
 
-  getAll() {
-    return [...this.books];
+  getAll(): Observable<Book[]> {
+    return this.valueChanges$;
+  }
+
+  update(changedBook: Book): Observable<Book>  {
+    return new Observable<Book>(subscriber => {
+      const bookCopy = {...changedBook};
+      const newBooks = this.booksSubject.value.map(
+        book => book.id === changedBook.id ? bookCopy : book);
+      subscriber.next(bookCopy);
+      subscriber.complete();
+      this.booksSubject.next(newBooks);
+    });
   }
 }

@@ -1,18 +1,20 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Book} from '../../model/book';
 import {BookService} from '../../services/book.service';
+import {Observable, Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'ba-book-overview',
   templateUrl: './book-overview.component.html',
   styleUrls: ['./book-overview.component.scss'],
 })
-export class BookOverviewComponent {
+export class BookOverviewComponent implements OnDestroy{
   selectedBook: Book | undefined;
-  books: Book[];
+  readonly books$: Observable<Book[]>;
+  private readonly unsubscribe = new Subject<void>();
 
-  constructor(books: BookService) {
-    this.books = books.getAll();
+  constructor(private readonly books: BookService) {
+    this.books$ = books.valueChanges$;
   }
 
   selectBook(book: Book) {
@@ -24,8 +26,17 @@ export class BookOverviewComponent {
   }
 
   updateOnBookChange(changedBook: Book) {
-    this.books = this.books.map(
-      book => book.id === changedBook.id ? changedBook : book);
-    this.selectedBook = changedBook;
+    this.books.update(changedBook)
+      .pipe(
+        takeUntil(this.unsubscribe)
+      )
+      .subscribe(newBook => {
+        this.selectedBook = newBook;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 }
