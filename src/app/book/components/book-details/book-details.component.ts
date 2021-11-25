@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {Book} from '../../model/book';
 import {ActivatedRoute} from '@angular/router';
 
@@ -10,9 +10,6 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class BookDetailsComponent {
   book: Book
-
-  @Output()
-  bookChange = new EventEmitter<Book>();
 
   constructor(private readonly currentRoute: ActivatedRoute) {
     this.book = currentRoute.snapshot.data['book'] || {author: '', title: ''}
@@ -28,6 +25,5 @@ export class BookDetailsComponent {
       author: authorElement?.value ?? '',
       title: titleElement?.value ?? ''
     }
-    this.bookChange.emit(updatedBook);
   }
 }
