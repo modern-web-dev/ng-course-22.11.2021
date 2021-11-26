@@ -5,6 +5,7 @@ import {BookService} from './services/book.service';
 import {SearchComponent} from './components/search/search.component';
 import {SharedModule} from '../shared/shared.module';
 import {BookDetailsResolver} from './components/book-details/book-details.resolver';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import {BookDetailsResolver} from './components/book-details/book-details.resolv
     SearchComponent
   ],
   imports: [
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   exports: [BookOverviewComponent, SearchComponent]
 })

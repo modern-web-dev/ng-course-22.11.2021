@@ -9,6 +9,7 @@ import {BookDetailsComponent} from './book/components/book-details/book-details.
 import {SharedModule} from './shared/shared.module';
 import {BookDetailsResolver} from './book/components/book-details/book-details.resolver';
 import {bookRoutes} from './book/book.routes';
+import {BookService} from "./book/services/book.service";
 
 @NgModule({
   declarations: [

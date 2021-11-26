@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'ba-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements AfterViewInit {
   @ViewChild('searchInput')
