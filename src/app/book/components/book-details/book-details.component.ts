@@ -1,10 +1,11 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Injector, OnDestroy} from '@angular/core';
 import {Book} from '../../model/book';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BookService} from '../../services/book.service';
 import {Subject, takeUntil} from 'rxjs';
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {startsWithA} from "./book-validators";
+import {PageWithForms} from "../../../shared/page-with-forms";
 
 @Component({
   selector: 'ba-book-details',
@@ -12,7 +13,7 @@ import {startsWithA} from "./book-validators";
   styleUrls: ['./book-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookDetailsComponent implements OnDestroy {
+export class BookDetailsComponent implements OnDestroy, PageWithForms {
   book: Book
 
   bookFormGroup = this.fb.group({
@@ -60,5 +61,9 @@ export class BookDetailsComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+  }
+
+  canExit(): boolean {
+    return this.bookFormGroup.pristine;
   }
 }

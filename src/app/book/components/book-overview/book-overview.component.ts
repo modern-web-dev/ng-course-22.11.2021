@@ -15,7 +15,7 @@ export class BookOverviewComponent {
   constructor(private readonly books: BookService,
               private readonly currentRoute: ActivatedRoute,
               private readonly router: Router) {
-    this.books$ = books.valueChanges$;
+    this.books$ = books.getAll();
   }
 
   goToBookDetails(book: Book): Promise<boolean> {

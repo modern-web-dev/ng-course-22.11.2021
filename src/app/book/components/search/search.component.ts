@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, InjectionToken, ViewChild} from '@angular/core';
 import {
   debounceTime,
   delay,
@@ -11,6 +11,8 @@ import {
   switchMap
 } from 'rxjs';
 import {FormControl} from "@angular/forms";
+import {BookService} from "../../services/book.service";
+import {Book} from "../../model/book";
 
 @Component({
   selector: 'ba-search',
@@ -18,20 +20,20 @@ import {FormControl} from "@angular/forms";
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements AfterViewInit {
-  results$: Observable<string[]> | undefined;
+  results$: Observable<Book[]> | undefined;
 
   formControl = new FormControl();
+
+  constructor(private readonly bookService: BookService) {
+  }
 
   ngAfterViewInit(): void {
     this.results$ = this.formControl.valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        searchForQueryResults()
+        switchMap(value => this.bookService.findBooks(value))
       );
   }
 }
 
-function searchForQueryResults(): OperatorFunction<string, string[]> {
-  return switchMap(query => of([`${query}0`, `${query}1`, `${query}1`]).pipe(delay(2000)));
-}

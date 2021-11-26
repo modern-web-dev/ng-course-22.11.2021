@@ -1,21 +1,31 @@
-
 <ba-search></ba-search>
-<table class="table">
-  <thead>
-  <tr>
-    <th scope="col">#</th>
-    <th scope="col">First name</th>
-    <th scope="col">Last name</th>
-    <th scope="col">Title</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let book of (books$ | async); let i = index"
-      (click)="goToBookDetails(book)"  >
-    <th scope="row">{{i + 1}}</th>
-    <td>{{book.author.firstName}}</td>
-    <td>{{book.author.lastName}}</td>
-    <td>{{book.title}}</td>
-  </tr>
-  </tbody>
-</table>
+<ng-container *ngIf="books$ | async as books">
+  <ng-container *ngIf="books.length>0;then booksFeedback else noBooksFeedback"></ng-container>
+  <ng-template #noBooksFeedback>
+    No books!
+  </ng-template>
+  <ng-template #booksFeedback>
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Title</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr (click)="goToBookDetails(book)"
+          *ngFor="let book of books; let i = index">
+        <th scope="row">{{i + 1}}</th>
+        <td>{{book.author.firstName}}</td>
+        <td>{{book.author.lastName}}</td>
+        <td>{{book.title}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div> Books: {{books.length }}</div>
+
+  </ng-template>
+</ng-container>
