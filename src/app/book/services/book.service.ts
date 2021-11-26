@@ -7,17 +7,26 @@ export class BookService {
   private booksSubject = new BehaviorSubject<Book[]>([
     {
       id: this.idSeq++,
-      author: 'Marek Matczak',
+      author: {
+        firstName: 'Marek',
+        lastName: 'Matczak'
+      },
       title: 'Angular for nerds'
     },
     {
       id: this.idSeq++,
-      author: 'Douglas Crockford',
+      author: {
+        firstName: 'Douglas',
+        lastName: 'Crockford'
+      },
       title: 'JavaScript. The Good Parts',
     },
     {
       id: this.idSeq++,
-      author: 'John Example',
+      author: {
+        firstName: 'John',
+        lastName: 'Example'
+      },
       title: 'A story on TypeScript',
     }
   ]);

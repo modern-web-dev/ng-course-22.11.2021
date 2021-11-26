@@ -1,17 +1,20 @@
+
+<ba-search></ba-search>
 <table class="table">
   <thead>
   <tr>
     <th scope="col">#</th>
-    <th scope="col">Author</th>
+    <th scope="col">First name</th>
+    <th scope="col">Last name</th>
     <th scope="col">Title</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let book of (books$ | async); let i = index"
-      (click)="goToBookDetails(book)"
-  >
+      (click)="goToBookDetails(book)"  >
     <th scope="row">{{i + 1}}</th>
-    <td>{{book.author}}</td>
+    <td>{{book.author.firstName}}</td>
+    <td>{{book.author.lastName}}</td>
     <td>{{book.title}}</td>
   </tr>
   </tbody>

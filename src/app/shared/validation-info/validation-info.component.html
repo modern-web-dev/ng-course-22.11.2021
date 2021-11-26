@@ -1,6 +1,6 @@
 
-<span *ngIf="control.invalid&&control.touched">
-  <span *ngIf="(control?.errors || {})['maxlength']"> Tooooo long! Current
-    length:{{(control?.errors || {})['maxlength'].actualLength}} </span>
-  <span *ngIf="(control?.errors || {})['required']"> Cant be empty! </span>
+<span *ngIf="formControl.invalid&&formControl.touched">
+  <span *ngIf="(formControl?.errors || {})['maxlength']"> Tooooo long! Current
+    length:{{(formControl?.errors || {})['maxlength'].actualLength}} </span>
+  <span *ngIf="(formControl?.errors || {})['required']"> Cant be empty! </span>
 </span>

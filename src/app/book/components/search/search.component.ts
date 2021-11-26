@@ -10,6 +10,7 @@ import {
   OperatorFunction,
   switchMap
 } from 'rxjs';
+import {FormControl} from "@angular/forms";
 
 @Component({
   selector: 'ba-search',
@@ -17,14 +18,13 @@ import {
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements AfterViewInit {
-  @ViewChild('searchInput')
-  searchInputElement: ElementRef | undefined
   results$: Observable<string[]> | undefined;
 
+  formControl = new FormControl();
+
   ngAfterViewInit(): void {
-    this.results$ = fromEvent<Event>(this.searchInputElement?.nativeElement, 'input')
+    this.results$ = this.formControl.valueChanges
       .pipe(
-        mapFromEventToTargetValue(),
         debounceTime(500),
         distinctUntilChanged(),
         searchForQueryResults()
@@ -34,11 +34,4 @@ export class SearchComponent implements AfterViewInit {
 
 function searchForQueryResults(): OperatorFunction<string, string[]> {
   return switchMap(query => of([`${query}0`, `${query}1`, `${query}1`]).pipe(delay(2000)));
-}
-
-function mapFromEventToTargetValue(): OperatorFunction<Event, string> {
-  return map(event => {
-    const searchInput = event.target as HTMLInputElement
-    return searchInput.value;
-  })
 }

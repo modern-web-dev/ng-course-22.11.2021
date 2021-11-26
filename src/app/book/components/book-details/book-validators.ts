@@ -7,6 +7,6 @@ export function startsWithA(control: AbstractControl): ValidationErrors | null {
 }
 
 export function mustBeLongerThan2(control: AbstractControl): ValidationErrors | null {
-  return control.value.length > 2 ?
+  return control.value && control.value.length > 2 ?
     null : {'mustBeBiggerThan2': {currentLength: control.value.length}};
 }

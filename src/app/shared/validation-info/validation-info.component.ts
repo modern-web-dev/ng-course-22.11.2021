@@ -6,8 +6,8 @@ import {AbstractControl} from "@angular/forms";
   templateUrl: './validation-info.component.html'
 })
 export class ValidationInfoComponent  {
- @Input()
- control!: AbstractControl;
+ @Input('of')
+ formControl!: AbstractControl;
 
  @HostBinding('class.invalid-feedback')
  invalidFeedback = true;

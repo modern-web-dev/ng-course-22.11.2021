@@ -1,14 +1,24 @@
-<form (submit)="save($event)"
-      [formGroup]="bookFormGroup">
-  <div class="mb-3">
-    <label class="form-label" for="author">Author:</label>
-    <input
-      class="form-control"
-      formControlName="author"
-      id="author"
-    >
-    <ba-validation-info [control]="authorControl"></ba-validation-info>
-  </div>
+<form (submit)="save($event)" [formGroup]="bookFormGroup">
+  <ng-container formGroupName="author">
+    <div class="mb-3">
+      <label class="form-label" for="firstName">First name:</label>
+      <input
+        class="form-control"
+        formControlName="firstName"
+        id="firstName"
+      >
+          <ba-validation-info [of]="firstNameControl"></ba-validation-info>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="lastName">Last name:</label>
+      <input
+        class="form-control"
+        formControlName="lastName"
+        id="lastName"
+      >
+          <ba-validation-info [of]="lastNameControl"></ba-validation-info>
+    </div>
+  </ng-container>
   <div class="mb-3">
     <label class="form-label" for="title">Title:</label>
     <input
@@ -16,9 +26,9 @@
       formControlName="title"
       id="title"
     >
-    <ba-validation-info [control]="titleControl"></ba-validation-info>
+    <ba-validation-info [of]="titleControl"></ba-validation-info>
   </div>
   <div>
-    <button class="btn btn-primary">Save</button>
+    <button [disabled]="bookFormGroup.pristine || bookFormGroup.invalid" class="btn btn-primary">Save</button>
   </div>
 </form>

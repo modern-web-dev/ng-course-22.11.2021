@@ -3,7 +3,7 @@ import {Book} from '../../model/book';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BookService} from '../../services/book.service';
 import {Subject, takeUntil} from 'rxjs';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, Validators} from "@angular/forms";
 import {startsWithA} from "./book-validators";
 
 @Component({
@@ -15,17 +15,20 @@ import {startsWithA} from "./book-validators";
 export class BookDetailsComponent implements OnDestroy {
   book: Book
 
-  bookFormGroup = new FormGroup({
-    'title': new FormControl(undefined,
-      [Validators.required, Validators.maxLength(30)]),
-    'author': new FormControl(undefined,
-      [Validators.required, Validators.maxLength(30), startsWithA]),
+  bookFormGroup = this.fb.group({
+    'title': [undefined, [Validators.required, Validators.maxLength(30)]],
+    'author': this.fb.group({
+      firstName: [undefined, [Validators.required, Validators.maxLength(15), startsWithA]],
+      lastName: [undefined, [Validators.required, Validators.maxLength(15)]]
+    }),
   });
   private readonly unsubscribe = new Subject<void>();
 
   constructor(private readonly currentRoute: ActivatedRoute,
               private readonly books: BookService,
-              private readonly router: Router) {
+              private readonly router: Router,
+              private readonly fb: FormBuilder,
+  ) {
     this.book = currentRoute.snapshot.data['book'] || {author: '', title: ''}
     this.bookFormGroup.patchValue(this.book);
   }
@@ -34,20 +37,21 @@ export class BookDetailsComponent implements OnDestroy {
     return this.bookFormGroup.get('title') as FormControl;
   }
 
-  get authorControl(): FormControl {
-    return this.bookFormGroup.get('author') as FormControl;
+  get firstNameControl(): FormControl {
+    return this.bookFormGroup.get('author.firstName') as FormControl;
+  }
+
+
+  get lastNameControl(): FormControl {
+    return this.bookFormGroup.get('author.lastName') as FormControl;
   }
 
   save(event: Event) {
     event.preventDefault();
-    const form: HTMLFormElement = event.target as HTMLFormElement;
-    const authorElement = form.querySelector<HTMLInputElement>('#author');
-    const author = authorElement?.value ?? '';
-    const titleElement = form.querySelector<HTMLInputElement>('#title');
-    const title = titleElement?.value ?? '';
+    const formValue = this.bookFormGroup.value;
     const saveOrUpdate = this.book?.id != null ? this.books.update({
-      id: this.book?.id, author, title
-    }) : this.books.save({author, title});
+      id: this.book?.id, ...formValue
+    }) : this.books.save(formValue);
     saveOrUpdate
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(() => this.router.navigate(['..'], {relativeTo: this.currentRoute}));
